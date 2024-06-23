@@ -6,7 +6,7 @@ pipeline {
             agent {
                 docker {
                     image 'node:18-alpine'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    reuseNode true
                 }
             }
             steps {
@@ -21,12 +21,19 @@ pipeline {
             }
         }
         stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+
             steps {
             sh '''
             echo "Test existence of build/index file"
             test -f build/index.html
             grep "charset" build/index.html
-            echo "Runniing test"
+            echo "Running test"
             npm test
             '''
             }
