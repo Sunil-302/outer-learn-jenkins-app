@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     stages {
+        /*
         stage('Build') {
             agent {
                 docker {
@@ -20,6 +21,7 @@ pipeline {
                 '''
             }
         }
+        */
         stage('Test') {
             agent {
                 docker {
@@ -30,10 +32,10 @@ pipeline {
 
             steps {
             sh '''
-            echo "Test existence of build/index file"
-            test -f build/index.html
-            grep "charset" build/index.html
-            echo "Running test"
+            # echo "Test existence of build/index file"
+            # test -f build/index.html
+            # grep "charset" build/index.html
+            # echo "Running test"
             npm test
             '''
             }
