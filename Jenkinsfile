@@ -1,10 +1,9 @@
+/* groovylint-disable LineLength */
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    // Commented out Build stage
-    /*
-    stage('Build') {
+    stages {
+        stage('Build') {
       agent {
         docker {
           image 'node:18-alpine'
@@ -21,10 +20,9 @@ pipeline {
         ls -la
         '''
       }
-    }
-    */
+        }
 
-    stage('Tests') {
+        stage('Tests') {
       parallel {
         stage('Unit Test') {
           agent {
@@ -41,6 +39,11 @@ pipeline {
             # echo "Running test"
             npm test
             '''
+          }
+          post {
+            always {
+              junit 'jest-results/junit.xml'
+            }
           }
         }
 
@@ -59,14 +62,29 @@ pipeline {
             npx playwright test --reporter=html
             '''
           }
+          post {
+            always {
+              publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            }
+          }
         }
       }
-    }
-  }
 
-  post {
-    always {
-      junit 'jest-results/junit.xml'
+      stage('Deploy') {
+        agent {
+          docker {
+            image 'node:18-alpine'
+            reuseNode true
+          }
+        }
+        steps {
+          sh '''
+        npm install netlify-cli
+        node_modules/.bin/netlify --version
+
+        '''
+        }
+      }
+        }
     }
-  }
 }
