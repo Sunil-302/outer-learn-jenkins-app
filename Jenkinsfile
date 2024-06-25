@@ -8,6 +8,8 @@ pipeline {
 
     stages {
 
+        /*
+
         stage('Up Docker image') {
             steps {
                 sh '''
@@ -15,6 +17,8 @@ pipeline {
                 '''
             }
         }
+
+        */
 
         stage('Build') {
             agent {
