@@ -14,6 +14,7 @@ pipeline {
                 docker build -t netlify-playwright .
                 '''
             }
+        }
 
         stage('Build') {
             agent {
