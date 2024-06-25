@@ -19,7 +19,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image 'netlify-playwright'
                     reuseNode true
                 }
             }
@@ -40,7 +40,7 @@ pipeline {
                 stage('Unit Test') {
                     agent {
                         docker {
-                            image 'node:18-alpine'
+                            image 'netlify-playwright'
                             reuseNode true
                         }
                     }
@@ -63,14 +63,13 @@ pipeline {
                 stage('E2e') {
                     agent {
                         docker {
-                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            image 'netlify-playwright'
                             reuseNode true
                         }
                     }
                     steps {
-                        sh '''
-                        npm install serve
-                        node_modules/.bin/serve -s build &
+                        sh '''                        
+                        serve -s build &
                         sleep 10
                         npx playwright test --reporter=html
                         '''
