@@ -19,7 +19,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'aws-user-jenkins', passwordVariable: 'AWS_ACCESS_KEY_ID', usernameVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh '''
                         aws --version
-                        aws s3 ls # CLI aws command to list thing from the s3 bucket
+                        aws s3 ls
                     '''
                 }                
             }
